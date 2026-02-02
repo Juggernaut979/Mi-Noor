@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary & Valentine's Day</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        beige: {
+                            50: '#fdfbf7',
+                            100: '#f7f3e8',
+                            200: '#efe5cd',
+                            300: '#e4d2aa', // Warm beige
+                            400: '#d6b883',
+                        },
+                        brown: {
+                            500: '#8B4513',
+                            600: '#723a0f',
+                            700: '#5D2E0C', // Saddle brown
+                            800: '#4a250a', // Dark chocolate
+                            900: '#3e1f08',
+                        },
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                        }
+                    },
+                    fontFamily: {
+                        script: ['"Great Vibes"', 'cursive'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
+                        cinzel: ['"Cinzel"', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7f3e8; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8B4513; 
+            border-radius: 4px;
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Polaroid Effect */
+        .polaroid {
+            background: white;
+            padding: 12px;
+            padding-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 10px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .polaroid:hover {
+            transform: scale(1.02) rotate(1deg);
+            z-index: 10;
+        }
+
+        /* Music Player Pulse */
+        .music-playing {
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(139, 69, 19, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(139, 69, 19, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 69, 19, 0); }
+        }
+
+        /* Loader */
+        #loader {
+            transition: opacity 0.5s ease-out;
+        }
+        
+        /* Carousel Styles */
+        .carousel-slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .carousel-slide.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-beige-50 text-brown-800 font-sans antialiased overflow-x-hidden relative">
+
+    <!-- Loading Screen -->
+    <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-beige-100 h-screen w-screen">
+        <div class="text-center">
+            <i data-lucide="heart" class="w-16 h-16 text-brown-500 animate-bounce mx-auto fill-current"></i>
+            <h2 class="mt-4 font-serif text-2xl text-brown-700">Loading our memories...</h2>
+            <p class="text-sm text-brown-400 mt-2">Turn up your volume</p>
+        </div>
+    </div>
+
+    <!-- Music Player (Floating) -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <button id="musicToggle" class="bg-brown-600 text-beige-100 p-4 rounded-full shadow-lg hover:bg-brown-700 transition-all flex items-center justify-center group focus:outline-none">
+            <i data-lucide="music" id="musicIcon" class="w-6 h-6"></i>
+            <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-in-out whitespace-nowrap text-sm ml-0 group-hover:ml-2">
+                Our Song
+            </span>
+        </button>
+        <!-- Audio Source: Replace src with your music file -->
+        <!-- Added 'autoplay' and 'loop' attributes -->
+        <audio id="bgMusic" loop autoplay>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-30 bg-beige-100/90 backdrop-blur-sm border-b border-brown-200 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="font-script text-3xl text-brown-700">Us</a>
+            <div class="hidden md:flex space-x-8 font-serif text-brown-800">
+                <a href="#hero" class="hover:text-brown-500 transition-colors">Home</a>
+                <a href="#story" class="hover:text-brown-500 transition-colors">Our Story</a>
+                <a href="#gallery" class="hover:text-brown-500 transition-colors">Memories</a>
+                <a href="#message" class="hover:text-brown-500 transition-colors">Love Letter</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-brown-700 focus:outline-none" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-beige-100 border-t border-brown-200 p-4">
+            <div class="flex flex-col space-y-4 font-serif text-center">
+                <a href="#hero" class="block text-brown-800" onclick="document.getElementById('mobileMenu').classList.add('hidden')">Home</a>
+                <a href="#story" class="block text-brown-800" onclick="document.getElementById('mobileMenu').classList.add('hidden')">Our Story</a>
+                <a href="#gallery" class="block text-brown-800" onclick="document.getElementById('mobileMenu').classList.add('hidden')">Memories</a>
+                <a href="#message" class="block text-brown-800" onclick="document.getElementById('mobileMenu').classList.add('hidden')">Love Letter</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <!-- Decorative Background Elements -->
+        <div class="absolute top-20 left-10 w-64 h-64 bg-brown-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-72 h-72 bg-beige-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style="animation-delay: 2s"></div>
+
+        <div class="container mx-auto px-4 text-center z-10">
+            <div class="mb-4 inline-block">
+                <i data-lucide="heart" class="w-8 h-8 text-brown-500 fill-current mx-auto mb-2 animate-bounce"></i>
+                <span class="uppercase tracking-[0.3em] text-sm text-brown-500 font-semibold">1 Year Together</span>
+            </div>
+            <h1 class="font-cinzel text-5xl md:text-7xl lg:text-8xl text-brown-800 mb-6 leading-tight">
+                Happy Anniversary<br>
+                <span class="font-script text-brown-600 text-6xl md:text-8xl lowercase block mt-2">& Valentine's Day</span>
+            </h1>
+            <p class="font-serif italic text-xl md:text-2xl text-brown-600 max-w-2xl mx-auto mb-10">
+                "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-6 justify-center items-center mt-8">
+                <div class="polaroid transform -rotate-3 w-64">
+                    <!-- Placeholder Image -->
+                    <img src="https://placehold.co/400x500/8B4513/FFF?text=Our+First+Date" alt="Our First Date" class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="font-script text-2xl text-center mt-3 text-brown-800">The Beginning</p>
+                </div>
+                <div class="polaroid transform rotate-3 w-64 translate-y-8 md:translate-y-0">
+                     <!-- Placeholder Image -->
+                    <img src="https://placehold.co/400x500/A0522D/FFF?text=Today" alt="Us Now" class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="font-script text-2xl text-center mt-3 text-brown-800">One Year Later</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-brown-400">
+            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+        </div>
+    </header>
+
+    <!-- Our Story Section -->
+    <section id="story" class="py-24 bg-white relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="font-serif text-4xl text-brown-800 mb-4">Our Journey</h2>
+                <div class="w-24 h-1 bg-brown-300 mx-auto"></div>
+            </div>
+
+            <!-- Timeline Item 1 -->
+            <div class="flex flex-col md:flex-row items-center mb-20 scroll-reveal">
+                <div class="md:w-1/2 p-6 flex justify-center order-2 md:order-1">
+                     <!-- Placeholder Image -->
+                    <img src="https://placehold.co/600x400/efe5cd/8B4513?text=How+We+Met" alt="Meeting" class="rounded-lg shadow-xl max-w-full md:max-w-md border-4 border-beige-200">
+                </div>
+                <div class="md:w-1/2 p-6 md:pl-12 order-1 md:order-2 text-center md:text-left">
+                    <span class="text-brown-400 font-bold tracking-widest uppercase text-sm">February 14, 202X</span>
+                    <h3 class="font-serif text-3xl text-brown-800 mt-2 mb-4">When Stars Aligned</h3>
+                    <p class="text-brown-600 leading-relaxed text-lg">
+                        It started with a simple hello, but I knew instantly that my life was about to change. The way you laughed at my terrible jokes, the spark in your eyes... it was magic from day one.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="flex flex-col md:flex-row items-center mb-20 scroll-reveal">
+                <div class="md:w-1/2 p-6 md:pr-12 text-center md:text-right">
+                    <span class="text-brown-400 font-bold tracking-widest uppercase text-sm">Summer 202X</span>
+                    <h3 class="font-serif text-3xl text-brown-800 mt-2 mb-4">Our First Adventure</h3>
+                    <p class="text-brown-600 leading-relaxed text-lg">
+                        Remember that trip we took? Getting lost, finding that little cafe, and just talking for hours. That was the moment I realized I didn't just like you, I was falling for you.
+                    </p>
+                </div>
+                <div class="md:w-1/2 p-6 flex justify-center">
+                     <!-- Placeholder Image -->
+                    <img src="https://placehold.co/600x400/e4d2aa/8B4513?text=First+Trip" alt="Adventure" class="rounded-lg shadow-xl max-w-full md:max-w-md border-4 border-beige-200">
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="flex flex-col md:flex-row items-center scroll-reveal">
+                <div class="md:w-1/2 p-6 flex justify-center order-2 md:order-1">
+                     <!-- Placeholder Image -->
+                    <img src="https://placehold.co/600x400/d6b883/8B4513?text=First+Date" alt="Anniversary" class="rounded-lg shadow-xl max-w-full md:max-w-md border-4 border-beige-200">
+                </div>
+                <div class="md:w-1/2 p-6 md:pl-12 order-1 md:order-2 text-center md:text-left">
+                    <span class="text-brown-400 font-bold tracking-widest uppercase text-sm">Today</span>
+                    <h3 class="font-serif text-3xl text-brown-800 mt-2 mb-4">365 Days of Happiness</h3>
+                    <p class="text-brown-600 leading-relaxed text-lg">
+                        One year later, and you are still my favorite person. Every day with you is a gift, and I can't wait to see what the next year brings.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carousel / Gallery Section -->
+    <section id="gallery" class="py-24 bg-beige-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 scroll-reveal">
+                <h2 class="font-serif text-4xl text-brown-800 mb-2">Beautiful Moments</h2>
+                <p class="text-brown-500 italic font-serif">Snapshots of our love</p>
+            </div>
+
+            <div class="relative max-w-4xl mx-auto shadow-2xl rounded-xl overflow-hidden border-8 border-white bg-white">
+                
+                <!-- Carousel Slides -->
+                <div class="relative h-[400px] md:h-[500px] w-full bg-brown-100" id="carousel-track">
+                    <!-- Slide 1 -->
+                    <div class="carousel-slide active w-full h-full">
+                        <img src="https://placehold.co/800x600/5D2E0C/FFF?text=Your+Beautiful+Smile" class="w-full h-full object-cover" alt="Memory 1">
+                        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-8">
+                            <p class="text-white font-serif text-xl">Your beautiful smile</p>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="carousel-slide w-full h-full">
+                        <img src="https://placehold.co/800x600/8B4513/FFF?text=Silly+Moments" class="w-full h-full object-cover" alt="Memory 2">
+                        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-8">
+                            <p class="text-white font-serif text-xl">Our silly moments</p>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="carousel-slide w-full h-full">
+                        <img src="https://placehold.co/800x600/A0522D/FFF?text=Dinner+Dates" class="w-full h-full object-cover" alt="Memory 3">
+                        <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-8">
+                            <p class="text-white font-serif text-xl">Late night dinner dates</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <button onclick="prevSlide()" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full backdrop-blur-sm transition-all">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </button>
+                <button onclick="nextSlide()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full backdrop-blur-sm transition-all">
+                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                </button>
+                
+                <!-- Indicators -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-white opacity-100 indicator cursor-pointer" onclick="goToSlide(0)"></div>
+                    <div class="w-3 h-3 rounded-full bg-white opacity-50 indicator cursor-pointer" onclick="goToSlide(1)"></div>
+                    <div class="w-3 h-3 rounded-full bg-white opacity-50 indicator cursor-pointer" onclick="goToSlide(2)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message / Letter Section -->
+    <section id="message" class="py-24 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#8B4513 1px, transparent 1px); background-size: 20px 20px;"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto bg-white p-8 md:p-12 shadow-2xl rounded-sm border-t-8 border-brown-600 transform rotate-1 scroll-reveal">
+                <div class="flex justify-center mb-6">
+                    <i data-lucide="heart" class="w-10 h-10 text-brown-600 fill-current"></i>
+                </div>
+                
+                <h2 class="font-script text-5xl text-center text-brown-800 mb-8">To My Love</h2>
+                
+                <div class="font-serif text-lg md:text-xl text-brown-700 leading-loose space-y-6">
+                    <p>
+                        My Dearest,
+                    </p>
+                    <p>
+                        I wanted to build this little corner of the internet just for us. To celebrate 365 days of love, laughter, and learning. You are the beige to my brown, the calm to my chaos, and the most beautiful part of every single day.
+                    </p>
+                    <p>
+                        This anniversary isn't just about looking back at the year we've had, but looking forward to all the years to come. Thank you for being my partner, my best friend, and my valentine.
+                    </p>
+                    <p>
+                        I love you more than code can compile.
+                    </p>
+                </div>
+                
+                <div class="mt-12 text-right">
+                    <p class="font-script text-3xl text-brown-600">Forever Yours,</p>
+                    <p class="font-serif text-brown-800 mt-2 font-bold">[Your Name]</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brown-900 text-beige-200 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-serif text-sm opacity-80">Made with ❤️ for our 1st Anniversary</p>
+            <p class="font-sans text-xs mt-2 opacity-50">February 14, 2026</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Music Player Variables
+        const musicBtn = document.getElementById('musicToggle');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        // Function to start music safely
+        function startMusic() {
+            if (!isPlaying) {
+                const playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        musicBtn.classList.add('music-playing');
+                        isPlaying = true;
+                    }).catch(error => {
+                        console.log("Autoplay prevented by browser, waiting for interaction.");
+                    });
+                }
+            }
+        }
+
+        // Loader & Autoplay Init
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            
+            // Try to autoplay immediately
+            startMusic();
+
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1500); 
+        });
+
+        // Browser Block Fallback: Start music on first interaction
+        document.body.addEventListener('click', function() {
+            startMusic();
+        }, { once: true }); // Only runs once
+
+        document.body.addEventListener('touchstart', function() {
+            startMusic();
+        }, { once: true });
+
+
+        // Manual Toggle Logic
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent the body click listener from firing twice
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('music-playing');
+                isPlaying = false;
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('music-playing');
+                isPlaying = true;
+            }
+        });
+
+        // Scroll Reveal
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+
+        // Carousel Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(ind => ind.classList.replace('opacity-100', 'opacity-50'));
+            
+            // Handle loop
+            if (n >= totalSlides) currentSlide = 0;
+            else if (n < 0) currentSlide = totalSlides - 1;
+            else currentSlide = n;
+
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.replace('opacity-50', 'opacity-100');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+        }
+
+        // Auto advance carousel
+        setInterval(nextSlide, 5000);
+
+    </script>
+</body>
+</html>
